@@ -3,6 +3,11 @@ package com.my.gwt.project.client;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -22,8 +27,9 @@ public class Phone implements EntryPoint {
 	private FlexTable mainFlexTable = new FlexTable();
 	private TextBox newContactNameTextBox = new TextBox();
 	private TextBox newContactNumberTextBox = new TextBox();
+	private TextBox searchTextBox = new TextBox();
 	private Button addContactButton = new Button("+");
-	private ArrayList<String> phoneNumbers = new ArrayList<String>();
+	private Button searchButton = new Button("Search");
 
 	@Override
 	public void onModuleLoad() {
@@ -35,8 +41,9 @@ public class Phone implements EntryPoint {
 				
 		mainFlexTable.getRowFormatter().addStyleName(0, "phonebookHeader");
 		mainFlexTable.addStyleName("phonebookList");
-		mainFlexTable.getCellFormatter().addStyleName(0, 1, "contactNameColumn");
-		mainFlexTable.getCellFormatter().addStyleName(0, 2, "contactNumberColumn");
+		mainFlexTable.getCellFormatter().addStyleName(0, 0, "contactNameColumn");
+		mainFlexTable.getCellFormatter().addStyleName(0, 1, "contactNumberColumn");
+		mainFlexTable.getCellFormatter().addStyleName(0, 2, "addColumn");
 
 		//Добавляем элементы управления на панель
 		addPanel.add(newContactNameTextBox);
@@ -44,11 +51,42 @@ public class Phone implements EntryPoint {
 		addPanel.add(addContactButton);
 		addPanel.addStyleName("addPanel");
 		
+		searchPanel.add(searchTextBox);
+		searchPanel.add(searchButton);
+		
 		mainPanel.add(mainFlexTable);
 		mainPanel.add(addPanel);
+		mainPanel.add(searchPanel);
 
 		//Связываем основную панель со стартовой html страницей
 		RootPanel.get("phonebook").add(mainPanel);
+		
+		searchTextBox.setFocus(true);
+		
+		addContactButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				addContact();
+			}
+		});
+
+		newContactNameTextBox.addKeyDownHandler(new KeyDownHandler() {
+
+			@Override
+			public void onKeyDown(KeyDownEvent event) {
+
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					
+					addContact();
+				}
+			}
+		});
+	}
+
+	private void addContact() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
