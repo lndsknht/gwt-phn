@@ -7,7 +7,7 @@ import static com.my.gwt.project.shared.FieldValidator.isValidNumber;
 
 public class DAOContact {
 	
-	private HashSet<ContactInfo> contacts = new HashSet<>();
+	private static HashSet<ContactInfo> contacts = new HashSet<>();
 
 	private HashSet<ContactInfo> getContacts() 
 	{
@@ -20,7 +20,7 @@ public class DAOContact {
 	 * @param phoneNumber номер контакта в свободной форме
 	 * @throws IllegalArgumentException
 	 * */
-	private void addContact(String contactName, String phoneNumber) 
+	private static void addContact(String contactName, String phoneNumber) 
 	{
 		String noramlizedNum = normalizeNum(phoneNumber);
 		if (isValidName(contactName) && isValidNumber(noramlizedNum))
@@ -29,13 +29,12 @@ public class DAOContact {
 		}
 		else
 		{
-			throw new IllegalArgumentException(String.format("Контакт с именем %s и номером %s не может быть добавлен!", contactName, noramlizedNum));
+			throw new IllegalArgumentException(String.format("Контакт с именем %s и номером %s не может быть добавлен!", contactName, phoneNumber));
 		}
 	} 
 	
 	private ContactInfo getContact(String nameOrNumber)
 	{
-		
 		return null;		
 	}
 	
@@ -44,7 +43,7 @@ public class DAOContact {
 	 * @param phoneNumber номер для редактирования
 	 * @return отредактированный номер
 	 * */
-	private String normalizeNum(String phoneNumber)
+	private static String normalizeNum(String phoneNumber)
 	{
 		return phoneNumber.replaceAll("[^0-9]", "");		
 	}

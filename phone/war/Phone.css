@@ -17,17 +17,18 @@ h1 {
 }
 
 .contactNameColumn {
-	text-align: right;
-	width: 8em;
+	text-align: center;
+	width: 13em;
 }
 
 .contactNumberColumn {
 	text-align: center;
+	width: 13em;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.addColumn {
+	text-align: center;
+ 	width: 1em;
 }
 
 /** Most GWT widgets already have a style name defined */
@@ -35,7 +36,7 @@ h1 {
   width: 400px;
 }
 
-.dialogVPanel {
+.addPanel {
   margin: 5px;
 }
 
