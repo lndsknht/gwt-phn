@@ -1,8 +1,7 @@
 package com.my.gwt.project.server;
 
-import com.my.gwt.project.client.GreetingService;
-import com.my.gwt.project.shared.FieldValidator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.my.gwt.project.client.GreetingService;
 
 /**
  * The server-side implementation of the RPC service.

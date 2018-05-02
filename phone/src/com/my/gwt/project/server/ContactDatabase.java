@@ -1,4 +1,4 @@
-package com.my.gwt.project.client;
+package com.my.gwt.project.server;
 
 import java.util.Date;
 

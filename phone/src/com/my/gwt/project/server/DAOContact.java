@@ -1,9 +1,9 @@
-package com.my.gwt.project.client;
+package com.my.gwt.project.server;
+
+import static com.my.gwt.project.server.FieldValidator.isValidName;
+import static com.my.gwt.project.server.FieldValidator.isValidNumber;
 
 import java.util.HashSet;
-
-import static com.my.gwt.project.shared.FieldValidator.isValidName;
-import static com.my.gwt.project.shared.FieldValidator.isValidNumber;
 
 public class DAOContact {
 	

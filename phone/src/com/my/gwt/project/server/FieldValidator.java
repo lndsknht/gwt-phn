@@ -1,4 +1,4 @@
-package com.my.gwt.project.shared;
+package com.my.gwt.project.server;
 
 import java.util.regex.Pattern;
 

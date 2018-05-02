@@ -1,6 +1,6 @@
-package com.my.gwt.project.client;
+package com.my.gwt.project.server;
 
-import com.my.gwt.project.client.ContactInfo;
+import com.my.gwt.project.server.ContactInfo;
 
 public class ContactInfo implements Comparable<ContactInfo>
 {	
