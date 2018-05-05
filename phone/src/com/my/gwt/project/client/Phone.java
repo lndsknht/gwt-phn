@@ -86,5 +86,4 @@ public class Phone implements EntryPoint {
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
