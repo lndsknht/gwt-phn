@@ -3,72 +3,88 @@ package com.my.gwt.project.server;
 import static com.my.gwt.project.server.FieldValidator.isValidName;
 import static com.my.gwt.project.server.FieldValidator.isValidNumber;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections4.Trie;
-import org.apache.commons.collections4.trie.PatriciaTrie;
+import java.util.stream.Stream;
 
 public class DAOContact {
-	
-    private static Trie<String, String> contactsTrie = new PatriciaTrie<>();
 
-	private Trie<String, String> getContacts() 
-	{
-		return contactsTrie;
-	}
+	private static List<String> names = new ArrayList<>();
+	private static List<String> phoneNumbers = new ArrayList<>();
+	private static boolean lineIsNum = false;
 
 	/**
 	 * Создать и добавить контакт в систему
 	 * @param contactName имя контакта
 	 * @param phoneNumber номер контакта в свободной форме
 	 * @throws IllegalArgumentException
-	 * */
-	public static void addContact(String contactName, String phoneNumber) 
-	{
-		String noramlizedNum = normalizeNum(phoneNumber);
-		if (isValidName(contactName) && isValidNumber(noramlizedNum))
-		{
-			contactsTrie.put(noramlizedNum.toString(), contactName);
+	 */
+	public static void addContact(String contactName, String phoneNumber) {
+		String noramlizedNumber = normalizeNum(phoneNumber);
+		if (isValidName(contactName) && isValidNumber(noramlizedNumber)) {
+			if (!phoneNumbers.contains(noramlizedNumber)) {
+				names.add(contactName);
+				phoneNumbers.add(noramlizedNumber);
+			} else {
+				throw new IllegalArgumentException(String.format("Контакт с номером %s уже существует!", phoneNumber));
+			}
+		} else {
+			throw new IllegalArgumentException(String.format("Контакт с именем %s и номером %s не может быть добавлен!",
+					contactName, phoneNumber));
 		}
-		else
-		{
-			throw new IllegalArgumentException(String.format("Контакт с именем %s и номером %s не может быть добавлен!", contactName, phoneNumber));
-		}
-	} 
-	
-	private ContactInfo getContact(String nameOrNumber)
-	{
-		return null;		
 	}
-	
+
 	/**
 	 * Удалить все лишние символы из номера, оставив только цифры
 	 * @param phoneNumber номер для редактирования
 	 * @return отредактированный номер
-	 * */
-	private static String normalizeNum(String phoneNumber)
-	{
-		return phoneNumber.replaceAll("[^0-9]", "");		
+	 */
+	private static String normalizeNum(String phoneNumber) {
+		if (phoneNumber == null)
+			return "";
+		return phoneNumber.replaceAll("[^0-9]", "");
 	}
-	
-    public static String[] guess(String start) {
-        String[] resultArray;
-        Map<String, String> resultMap = MapValueSorter.sortByValue(contactsTrie.prefixMap(start));
-        if (resultMap.size() >= 12) {
-            resultArray = new String[12];
-        } else {
-            resultArray = new String[resultMap.size()];
-        }
 
-        Iterator<Map.Entry<String, String>> iterator = resultMap.entrySet().iterator();
+	/**
+	 * Метод для определения, содержит ли строка только цифры
+	 * @param textToCheck проверяемая строка
+	 * @return true - если только цифры, false - если строка состоит только из
+	 *         букв или же из букв и цифр
+	 */
+	private static boolean isNumber(String textToCheck) {
+		return textToCheck.matches("\\d+");
+	}
 
-        for (int i = 0; i < resultArray.length; i++) {
-            if (iterator.hasNext()) {
-                resultArray[i] = iterator.next().getKey();
-            }
-        }
-        return resultArray;
-    }
+	private static String[] getEntries(String numOrName) {
+		lineIsNum = isNumber(numOrName);
+		Stream<String> stream = lineIsNum ? phoneNumbers.stream() : names.stream();
+		return stream.filter(strings -> strings.contains(numOrName)).toArray(String[]::new);
+	}
+
+	/**
+	 * Получить найденные совпадения в виде мапы (номер-имя)
+	 * */
+	public static Map<String, String> guess(Object numOrName) {
+		assert numOrName instanceof String;
+
+		String lineToSearch = (String) numOrName;
+		String[] entries = getEntries(lineToSearch);
+		Map<String, String> foundedLines = new HashMap<>();
+		if (entries.length == 0) return foundedLines;
+
+		if (lineIsNum) {
+			for (int i = 0; i < entries.length; i++) 
+			{
+				foundedLines.put(entries[i], names.get(phoneNumbers.indexOf(entries[i])));
+			}
+		} else {
+			for (int i = 0; i < entries.length; i++) 
+			{
+				foundedLines.put(phoneNumbers.get(names.indexOf(entries[i])), entries[i]);
+			}
+		}
+		return foundedLines;
+	}
 }

@@ -15,11 +15,11 @@ public class FieldValidator {
 	 * @return boolean
 	 * */
 	public static boolean isValidName(String name) {
-		if (name == null) {
+		if (name == null || name.length() < 3) {
 			return false;
 		}
 		
-		return Pattern.matches("[a-zA-Z]+", name) && name.length() >= 3;
+		return Pattern.matches("[a-zA-Z]+", name);
 	}
 	
 	/**
