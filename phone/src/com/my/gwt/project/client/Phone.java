@@ -1,8 +1,5 @@
 package com.my.gwt.project.client;
 
-import static com.my.gwt.project.server.FieldValidator.isValidName;
-import static com.my.gwt.project.server.FieldValidator.isValidNumber;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +14,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -26,7 +22,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.my.gwt.project.server.DAOContact;
 
 /**
  * ќсновной класс PhoneBook
@@ -38,7 +33,6 @@ public class Phone implements EntryPoint {
 	private VerticalPanel searchPanel = new VerticalPanel();
 	private HorizontalPanel addPanel = new HorizontalPanel();
 	private FlexTable mainFlexTable = new FlexTable();
-	private FlexTable tempMainFlexTable;
 	private TextBox nameTextBox = new TextBox();
 	private TextBox numberTextBox = new TextBox();
 	private TextBox searchTextBox = new TextBox();
@@ -118,7 +112,9 @@ public class Phone implements EntryPoint {
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE)
 				{
-					
+					if (names.size() != 0) {
+						showAllContacts();
+					}
 				}
 			}
 		});
@@ -127,7 +123,7 @@ public class Phone implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (names.size() != 0) {
-				updateTableContent(searchTextBox.getText());
+					updateTableContent(searchTextBox.getText());
 				} else {
 					Window.alert("¬ списке контактов отсутствуют записи!");
 					return;
@@ -136,12 +132,29 @@ public class Phone implements EntryPoint {
 		});
 	}
 	
+	private void showAllContacts()
+	{
+		mainFlexTable.removeAllRows();
+		mainFlexTable.setText(0, 0, "Name");
+		mainFlexTable.setText(0, 1, "Phone number");
+		mainFlexTable.setText(0, 2, "Remove");		
+		
+		for (int i = 0; i < names.size(); i++)
+		{
+			renderChangesOnFlexTable(names.get(i), phoneNumbers.get(i));
+		}
+	}
+	
 	/**
 	 * ќбновить содержимое списка контактов в зависимости от найденных совпадений
 	 * */
 	private void updateTableContent(String searchingLine) {
 		HashMap<String, String> foundedMatches = guess(searchingLine);
-		tempMainFlexTable = mainFlexTable;
+		if (foundedMatches.size() == 0)
+		{
+			return;
+		}
+//		tempMainFlexTable = mainFlexTable;
 //		for (int i = 1; i <= mainFlexTable.getRowCount(); i++)
 //		{
 //			mainFlexTable.removeRow(i);
@@ -152,10 +165,9 @@ public class Phone implements EntryPoint {
 		mainFlexTable.setText(0, 2, "Remove");
 		
 		Iterator iterator = foundedMatches.entrySet().iterator();
-		
 		while (iterator.hasNext())
 		{
-			Map.Entry pair = (Entry) iterator.next();
+			Map.Entry<String, String> pair = (Entry) iterator.next();
 			renderChangesOnFlexTable((String)pair.getValue(), (String)pair.getKey());
 		}
 	}
@@ -165,17 +177,16 @@ public class Phone implements EntryPoint {
 		String contactName = nameTextBox.getText();
 		
 		String noramlizedNumber = normalizeNum(rawNumber);
-		if (isValidName(contactName) && isValidNumber(noramlizedNumber)) {
+		if (FieldValidator.isValidName(contactName) && FieldValidator.isValidNumber(noramlizedNumber)) {
 			if (!phoneNumbers.contains(noramlizedNumber)) {
 				names.add(contactName);
 				phoneNumbers.add(noramlizedNumber);
 			} else {
-				Window.alert(String.format(" онтакт с номером %s уже существует!", rawNumber));
+				Window.alert(" онтакт с таким номером уже существует!");
 				return;
 			}
 		} else {
-			Window.alert(String.format(" онтакт с именем %s и номером %s не может быть добавлен!",
-					contactName, rawNumber));
+			Window.alert(" онтакт с такими именем и номером не может быть добавлен!");
 			return;
 		}
 		
@@ -246,7 +257,11 @@ public class Phone implements EntryPoint {
 	private static HashMap<String, String> guess(String numOrName) {
 		String[] entries = getEntries(numOrName);
 		HashMap<String, String> foundedLines = new HashMap<>();
-		if (entries.length == 0) return foundedLines;
+		if (entries.length == 0)
+		{
+			Window.alert("ѕо запросу ничего не найдено");
+			return foundedLines;
+		}
 
 		if (lineIsNum) {
 			for (int i = 0; i < entries.length; i++) 

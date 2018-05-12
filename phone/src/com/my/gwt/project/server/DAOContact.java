@@ -1,7 +1,7 @@
 package com.my.gwt.project.server;
 
-import static com.my.gwt.project.server.FieldValidator.isValidName;
-import static com.my.gwt.project.server.FieldValidator.isValidNumber;
+import static com.my.gwt.project.client.FieldValidator.isValidName;
+import static com.my.gwt.project.client.FieldValidator.isValidNumber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
