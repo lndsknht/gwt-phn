@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.google.gwt.user.client.Window;
+
 public class DAOContact {
 
 	private static List<String> names = new ArrayList<>();
@@ -16,10 +18,9 @@ public class DAOContact {
 	private static boolean lineIsNum = false;
 
 	/**
-	 * —оздать и добавить контакт в систему
+	 * ƒобавить контактную информацию в список
 	 * @param contactName им€ контакта
 	 * @param phoneNumber номер контакта в свободной форме
-	 * @throws IllegalArgumentException
 	 */
 	public static void addContact(String contactName, String phoneNumber) {
 		String noramlizedNumber = normalizeNum(phoneNumber);
@@ -28,10 +29,10 @@ public class DAOContact {
 				names.add(contactName);
 				phoneNumbers.add(noramlizedNumber);
 			} else {
-				throw new IllegalArgumentException(String.format(" онтакт с номером %s уже существует!", phoneNumber));
+				Window.alert(String.format(" онтакт с номером %s уже существует!", phoneNumber));
 			}
 		} else {
-			throw new IllegalArgumentException(String.format(" онтакт с именем %s и номером %s не может быть добавлен!",
+			Window.alert(String.format(" онтакт с именем %s и номером %s не может быть добавлен!",
 					contactName, phoneNumber));
 		}
 	}

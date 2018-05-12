@@ -30,8 +30,16 @@
 	<properties>
 		<postgresql.version>9.1-901-1.jdbc4</postgresql.version>
 		<hibernate-version>5.2.17.Final</hibernate-version>
+		<gwtVersion>2.8.2</gwtVersion>
 	</properties>
 	<dependencies>
+	   	<dependency>
+          	<groupId>com.google.gwt</groupId>
+          	<artifactId>gwt</artifactId>
+         	<version>${gwtVersion}</version>
+          	<scope>import</scope>
+          	<type>pom</type>
+       	</dependency>
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
