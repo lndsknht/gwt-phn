@@ -1,6 +1,6 @@
 package com.my.gwt.project.client;
 
-import java.util.regex.Pattern;
+//import java.util.regex.Pattern;
 
 /**
  * Класс предназначен для проверки вводимых значений имён и номеров
@@ -19,7 +19,8 @@ public class FieldValidator {
 			return false;
 		}
 		
-		return Pattern.matches("[a-zA-Z]+", name);
+//		return Pattern.matches("[a-zA-Z]+", name);
+		return true;
 	}
 	
 	/**

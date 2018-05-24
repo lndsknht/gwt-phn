@@ -16,6 +16,12 @@ h1 {
   font-style: italic;
 }
 
+.phonebookList {
+  border: 1px solid silver;
+  padding: 2px;
+  margin-bottom:6px;
+}
+
 .contactNameColumn {
 	text-align: center;
 	width: 13em;

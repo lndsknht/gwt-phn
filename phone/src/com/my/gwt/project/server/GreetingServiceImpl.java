@@ -1,6 +1,7 @@
 package com.my.gwt.project.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.my.gwt.project.client.FieldValidator;
 import com.my.gwt.project.client.GreetingService;
 
 /**

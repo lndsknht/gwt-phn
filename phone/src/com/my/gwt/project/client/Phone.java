@@ -50,7 +50,6 @@ public class Phone implements EntryPoint {
 		mainFlexTable.setText(0, 2, "Remove");
 		
 		mainFlexTable.setCellPadding(6);
-				
 		mainFlexTable.getRowFormatter().addStyleName(0, "phonebookHeader");
 		mainFlexTable.addStyleName("phonebookList");
 		mainFlexTable.getCellFormatter().addStyleName(0, 0, "contactNameColumn");
@@ -139,6 +138,13 @@ public class Phone implements EntryPoint {
 		mainFlexTable.setText(0, 1, "Phone number");
 		mainFlexTable.setText(0, 2, "Remove");		
 		
+		mainFlexTable.setCellPadding(6);
+		mainFlexTable.getRowFormatter().addStyleName(0, "phonebookHeader");
+		mainFlexTable.addStyleName("phonebookList");
+		mainFlexTable.getCellFormatter().addStyleName(0, 0, "contactNameColumn");
+		mainFlexTable.getCellFormatter().addStyleName(0, 1, "contactNumberColumn");
+		mainFlexTable.getCellFormatter().addStyleName(0, 2, "removeColumn");
+		
 		for (int i = 0; i < names.size(); i++)
 		{
 			renderChangesOnFlexTable(names.get(i), phoneNumbers.get(i));
@@ -154,15 +160,10 @@ public class Phone implements EntryPoint {
 		{
 			return;
 		}
-//		tempMainFlexTable = mainFlexTable;
-//		for (int i = 1; i <= mainFlexTable.getRowCount(); i++)
-//		{
-//			mainFlexTable.removeRow(i);
-//		}
-		mainFlexTable.removeAllRows();
-		mainFlexTable.setText(0, 0, "Name");
-		mainFlexTable.setText(0, 1, "Phone number");
-		mainFlexTable.setText(0, 2, "Remove");
+		for (int i = 1; i <= mainFlexTable.getRowCount(); i++)
+		{
+			mainFlexTable.removeRow(i);
+		}
 		
 		Iterator iterator = foundedMatches.entrySet().iterator();
 		while (iterator.hasNext())
@@ -201,14 +202,14 @@ public class Phone implements EntryPoint {
 		int rowsNum = mainFlexTable.getRowCount();
 		mainFlexTable.setText(rowsNum, 0, contactName);
 		mainFlexTable.setText(rowsNum, 1, noramlizedNumber);
-		mainFlexTable.setWidget(rowsNum, 2, new Label());
+//		mainFlexTable.setWidget(rowsNum, 2, new Label());
 		
-		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 1, "watchListNumericColumn");
-		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 2, "watchListNumericColumn");
-		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 3, "watchListRemoveColumn");
+//		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 1, "contactNameColumn");
+//		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 2, "contactNumberColumn");
+//		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 3, "removeColumn");
 
 		Button removeContactButton = new Button("x");
-		removeContactButton.addStyleDependentName("remove");
+		removeContactButton.addStyleDependentName("removeColumn");
 		removeContactButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -220,7 +221,7 @@ public class Phone implements EntryPoint {
 				mainFlexTable.removeRow(removedIndex + 1);
 			}
 		});
-		mainFlexTable.setWidget(rowsNum, 4, removeContactButton);
+		mainFlexTable.setWidget(rowsNum, 2, removeContactButton);
 	}
 	
 	/**
