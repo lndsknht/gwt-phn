@@ -27,4 +27,28 @@ public class CreateContact implements Action<CreateContactResult>
 	{
 		return phone;
 	}
+	
+//	private ArrayList<String> name;
+//	private ArrayList<String> phone;
+//	
+//	 /** For serialization only. */
+//	CreateContact()
+//	{
+//	}
+//	
+//	public CreateContact(ArrayList<String> name, ArrayList<String> phone)
+//	{
+//		this.name = name;
+//		this.phone = phone;
+//	}
+//	
+//	public ArrayList<String> getName()
+//	{
+//		return name;
+//	}
+//	
+//	public ArrayList<String> getPhone()
+//	{
+//		return phone;
+//	}
 }

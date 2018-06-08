@@ -15,20 +15,26 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.my.gwt.project.shared.CreateContact;
+import com.my.gwt.project.shared.CreateContactResult;
+
+import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
+import net.customware.gwt.dispatch.client.DispatchAsync;
+import net.customware.gwt.dispatch.client.standard.StandardDispatchAsync;
 
 /**
  * Основной класс PhoneBook
  * 
  * */
 public class Phone implements EntryPoint {
-
+	private final DispatchAsync dispatchAsync = new StandardDispatchAsync(new DefaultExceptionHandler());
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private VerticalPanel searchPanel = new VerticalPanel();
 	private HorizontalPanel addPanel = new HorizontalPanel();
@@ -165,7 +171,7 @@ public class Phone implements EntryPoint {
 			mainFlexTable.removeRow(i);
 		}
 		
-		Iterator iterator = foundedMatches.entrySet().iterator();
+		Iterator<?> iterator = foundedMatches.entrySet().iterator();
 		while (iterator.hasNext())
 		{
 			Map.Entry<String, String> pair = (Entry) iterator.next();
@@ -180,8 +186,17 @@ public class Phone implements EntryPoint {
 		String noramlizedNumber = normalizeNum(rawNumber);
 		if (FieldValidator.isValidName(contactName) && FieldValidator.isValidNumber(noramlizedNumber)) {
 			if (!phoneNumbers.contains(noramlizedNumber)) {
-				names.add(contactName);
-				phoneNumbers.add(noramlizedNumber);
+//				names.add(contactName);
+//				phoneNumbers.add(noramlizedNumber);
+				dispatchAsync.execute(new CreateContact(contactName, noramlizedNumber), new AsyncCallback<CreateContactResult>() {
+					public void onFailure(Throwable e ) {
+		                Window.alert( "Error: " + e.getMessage() );
+		            }
+
+					public void onSuccess(CreateContactResult result) {
+						Window.alert("Contact successfully added to the list!");
+					}
+				});
 			} else {
 				Window.alert("Контакт с таким номером уже существует!");
 				return;
@@ -193,7 +208,6 @@ public class Phone implements EntryPoint {
 		
 		nameTextBox.setText("");
 		numberTextBox.setText("");
-		
 		renderChangesOnFlexTable(contactName, noramlizedNumber);
 	}
 	

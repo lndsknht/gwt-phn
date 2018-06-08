@@ -1,40 +1,44 @@
 package com.my.gwt.project.shared;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import net.customware.gwt.dispatch.shared.Result;
 
 public class CreateContactResult implements Result 
 {
-//	private HashMap<String, String> contactToAdd;
-	private String name;
-	private String phone;
-	private HashMap<String, String> currentContacts;
+	private ArrayList<String> addedName;
+	private ArrayList<String> addedPhone;
+	private ArrayList<String> currentName;
+	private ArrayList<String> currentPhone;
 	
 	 /** For serialization only. */
 	CreateContactResult() 
 	{
 	}
 	
-	public CreateContactResult(String name, String phone, HashMap<String, String> currentContacts) 
+	public CreateContactResult(ArrayList<String> addedName, ArrayList<String> addedPhone, ArrayList<String> currentNames, ArrayList<String> currentPhones) 
 	{
-		this.name = name;
-		this.phone = phone;
-		this.currentContacts = currentContacts;
+		this.addedName = addedName;
+		this.addedPhone = addedPhone;
+		this.currentName = currentNames;
+		this.currentPhone = currentPhones;
 	}
 
-	public HashMap<String, String> getCurrentContacts() 
+	public ArrayList<String> getCurrentName() 
 	{
-		return currentContacts;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getPhone() {
-		return phone;
+		return currentName;
 	}
 	
-	
+	public ArrayList<String> getCurrentPhone()
+	{
+		return currentPhone;
+	}
+
+	public ArrayList<String> getName() {
+		return addedName;
+	}
+
+	public ArrayList<String> getPhone() {
+		return addedPhone;
+	}
 }
