@@ -6,8 +6,8 @@ import net.customware.gwt.dispatch.shared.Result;
 
 public class CreateContactResult implements Result 
 {
-	private ArrayList<String> addedName;
-	private ArrayList<String> addedPhone;
+	private String addedName;
+	private String addedPhone;
 	private ArrayList<String> currentName;
 	private ArrayList<String> currentPhone;
 	
@@ -16,7 +16,7 @@ public class CreateContactResult implements Result
 	{
 	}
 	
-	public CreateContactResult(ArrayList<String> addedName, ArrayList<String> addedPhone, ArrayList<String> currentNames, ArrayList<String> currentPhones) 
+	public CreateContactResult(String addedName, String addedPhone, ArrayList<String> currentNames, ArrayList<String> currentPhones) 
 	{
 		this.addedName = addedName;
 		this.addedPhone = addedPhone;
@@ -34,11 +34,11 @@ public class CreateContactResult implements Result
 		return currentPhone;
 	}
 
-	public ArrayList<String> getName() {
+	public String getAddedName() {
 		return addedName;
 	}
 
-	public ArrayList<String> getPhone() {
+	public String getAddedPhone() {
 		return addedPhone;
 	}
 }

@@ -23,6 +23,7 @@ public class SimpleDispatchService extends RemoteServiceServlet implements Stand
 
         InstanceActionHandlerRegistry registry = new DefaultActionHandlerRegistry();
         registry.addHandler(new CreateContactHandler());
+        registry.addHandler(new RemoveContactHandler());
         dispatch = new SimpleDispatch(registry);
     }
 

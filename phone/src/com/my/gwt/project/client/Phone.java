@@ -24,6 +24,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.my.gwt.project.shared.CreateContact;
 import com.my.gwt.project.shared.CreateContactResult;
+import com.my.gwt.project.shared.RemoveContact;
+import com.my.gwt.project.shared.RemoveContactResult;
 
 import net.customware.gwt.dispatch.client.DefaultExceptionHandler;
 import net.customware.gwt.dispatch.client.DispatchAsync;
@@ -216,11 +218,6 @@ public class Phone implements EntryPoint {
 		int rowsNum = mainFlexTable.getRowCount();
 		mainFlexTable.setText(rowsNum, 0, contactName);
 		mainFlexTable.setText(rowsNum, 1, noramlizedNumber);
-//		mainFlexTable.setWidget(rowsNum, 2, new Label());
-		
-//		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 1, "contactNameColumn");
-//		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 2, "contactNumberColumn");
-//		mainFlexTable.getCellFormatter().addStyleName(rowsNum, 3, "removeColumn");
 
 		Button removeContactButton = new Button("x");
 		removeContactButton.addStyleDependentName("removeColumn");
@@ -228,11 +225,21 @@ public class Phone implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				dispatchAsync.execute(new RemoveContact(contactName, noramlizedNumber), new AsyncCallback<RemoveContactResult>() {
+					public void onFailure(Throwable e ) {
+		                Window.alert( "Error: " + e.getMessage() );
+		            }
 
-				int removedIndex = names.indexOf(contactName);
-				names.remove(removedIndex);
-				phoneNumbers.remove(removedIndex);
-				mainFlexTable.removeRow(removedIndex + 1);
+					@Override
+					public void onSuccess(RemoveContactResult result) {
+						mainFlexTable.removeRow(result.getRemovedNamePosition() + 1);
+					}
+				});
+				
+//				int removedIndex = names.indexOf(contactName);
+//				names.remove(removedIndex);
+//				phoneNumbers.remove(removedIndex);
+//				mainFlexTable.removeRow(removedIndex + 1);
 			}
 		});
 		mainFlexTable.setWidget(rowsNum, 2, removeContactButton);

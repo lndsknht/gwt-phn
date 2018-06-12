@@ -2,29 +2,27 @@ package com.my.gwt.project.shared;
 
 import net.customware.gwt.dispatch.shared.Action;
 
-public class CreateContact implements Action<CreateContactResult> 
+public class RemoveContact implements Action<RemoveContactResult>
 {
 	private String name;
 	private String phone;
 	
 	 /** For serialization only. */
-	CreateContact()
+	RemoveContact()
 	{
 	}
 	
-	public CreateContact(String name, String phone)
+	public RemoveContact(String name, String phone)
 	{
 		this.name = name;
 		this.phone = phone;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return name;
 	}
-	
-	public String getPhone()
-	{
+
+	public String getPhone() {
 		return phone;
 	}
 }
