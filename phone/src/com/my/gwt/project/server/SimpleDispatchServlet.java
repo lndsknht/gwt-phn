@@ -11,15 +11,12 @@ import net.customware.gwt.dispatch.shared.Action;
 import net.customware.gwt.dispatch.shared.DispatchException;
 import net.customware.gwt.dispatch.shared.Result;
 
-public class SimpleDispatchService extends RemoteServiceServlet implements StandardDispatchService {
+public class SimpleDispatchServlet extends RemoteServiceServlet implements StandardDispatchService {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -4548169495771600034L;
 	private Dispatch dispatch;
 
-    public SimpleDispatchService() {
+    public SimpleDispatchServlet() {
 
         InstanceActionHandlerRegistry registry = new DefaultActionHandlerRegistry();
         registry.addHandler(new CreateContactHandler());

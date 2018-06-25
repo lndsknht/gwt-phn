@@ -30,4 +30,6 @@
 
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>
+  
+  <servlet class="com.my.gwt.project.server.SimpleDispatchServlet" path="/dispatch"/>
 </module>

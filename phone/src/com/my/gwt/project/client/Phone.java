@@ -47,8 +47,8 @@ public class Phone implements EntryPoint {
 	private Button addContactButton = new Button("+");
 	private Button searchButton = new Button("Search");
 	
-	private static List<String> names = new ArrayList<>();
-	private static List<String> phoneNumbers = new ArrayList<>();
+//	private static List<String> names = new ArrayList<>();
+//	private static List<String> phoneNumbers = new ArrayList<>();
 	private static boolean lineIsNum = false;
 
 	@Override
