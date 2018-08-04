@@ -1,7 +1,5 @@
 package com.my.gwt.project.client;
 
-import java.util.ArrayList;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -86,7 +84,5 @@ public class Phone implements EntryPoint {
 
 	private void addContact() {
 		// TODO Auto-generated method stub
-		
 	}
-	
 }
