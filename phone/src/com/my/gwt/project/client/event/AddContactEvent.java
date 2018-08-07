@@ -1,5 +1,7 @@
 package com.my.gwt.project.client.event;
 
-public class AddContactEvent {
+import com.google.gwt.user.client.Event;
+
+public class AddContactEvent extends Event {
 
 }
