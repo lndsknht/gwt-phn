@@ -29,7 +29,6 @@ public class Phone implements EntryPoint {
 	private Button addContactButton = new Button("+");
 	private Button searchButton = new Button("Search");
 
-	@Override
 	public void onModuleLoad() {
 		mainFlexTable.setText(0, 0, "Name");
 		mainFlexTable.setText(0, 1, "Phone number");
@@ -63,7 +62,6 @@ public class Phone implements EntryPoint {
 		
 		addContactButton.addClickHandler(new ClickHandler() {
 			
-			@Override
 			public void onClick(ClickEvent event) {
 				addContact();
 			}
@@ -71,7 +69,6 @@ public class Phone implements EntryPoint {
 
 		newContactNameTextBox.addKeyDownHandler(new KeyDownHandler() {
 
-			@Override
 			public void onKeyDown(KeyDownEvent event) {
 
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {

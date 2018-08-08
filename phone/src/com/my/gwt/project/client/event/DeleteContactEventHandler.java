@@ -1,5 +1,7 @@
 package com.my.gwt.project.client.event;
 
-public class DeleteContactEventHandler {
+import com.google.gwt.event.shared.EventHandler;
 
+public interface DeleteContactEventHandler extends EventHandler {
+	void onDeleteContact(DeleteContactEvent event);
 }

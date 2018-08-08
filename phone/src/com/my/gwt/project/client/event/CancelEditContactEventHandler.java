@@ -1,5 +1,7 @@
 package com.my.gwt.project.client.event;
 
-public class CancelEditContactEventHandler {
+import com.google.gwt.event.shared.EventHandler;
 
+public interface CancelEditContactEventHandler extends EventHandler {
+	void onCancelEditContact(CancelEditContactEvent event);
 }

@@ -1,5 +1,5 @@
 package com.my.gwt.project.client.event;
 
-public class SearchContactEventHandler {
+public interface SearchContactEventHandler {
 
 }

@@ -2,6 +2,7 @@ package com.my.gwt.project.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.SortedMap;
 
 import org.apache.commons.collections4.Trie;
 import org.apache.commons.collections4.trie.PatriciaTrie;
@@ -57,19 +58,30 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 	}
 
 	public Boolean deleteContact(String id) {
-		
-		return null;
+		String name = idsNames.get(id);
+		contactsTrie.remove(name);
+		idsNames.remove(id);
+		availableIds.add(id);
+		return true;
 	}
 
-	public HashMap<String, Contact> getContacts() {
-		// TODO Auto-generated method stub
-		return null;
+	public SortedMap<String, Contact> getContacts() {
+		return contactsTrie;
 	}
 
-	public ArrayList<Contact> deleteContacts(ArrayList<String> ids) {
-		// TODO Auto-generated method stub
-		return null;
+	public SortedMap<String, Contact> deleteContacts(ArrayList<String> ids) {
+		for (int i = 0; i < ids.size(); i++) {
+			String id = ids.get(i);
+			String name = idsNames.get(id);
+			contactsTrie.remove(name);
+			availableIds.add(id);
+			idsNames.remove(id);
+		}
+		return contactsTrie;
 	}
 
+	public SortedMap<String, Contact> getAssumptions(String name) {
+		return contactsTrie.prefixMap(name);
+	}
 
 }

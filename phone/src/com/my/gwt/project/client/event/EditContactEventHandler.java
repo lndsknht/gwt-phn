@@ -1,5 +1,7 @@
 package com.my.gwt.project.client.event;
 
-public class EditContactEventHandler {
+import com.google.gwt.event.shared.EventHandler;
 
+public interface EditContactEventHandler extends EventHandler {
+	void onEditContact(EditContactEvent event);
 }
