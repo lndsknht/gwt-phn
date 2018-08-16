@@ -1,49 +1,37 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+table {
+	border-collapse: collapse;
+	margin: 0px;
+	padding: 0px;
+	spacing: 0px;
 }
 
-.phonebookHeader {
-  background-color: #2062B8;
-  color: white;
-  font-style: italic;
+td {
+	border-collapse: collapse;
+	margin: 0px;
+	padding: 0px;
+	spacing: 0px;
 }
 
-.contactNameColumn {
-	text-align: right;
-	width: 8em;
+th, td {
+	padding: 0px;
 }
 
-.contactNumberColumn {
-	text-align: center;
+td.contacts-ListContainer {
+	padding-right: 10px;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+td.contacts-ListMenu {
+	background-color: #D0E4F6;
+	padding-bottom: 6px;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+td.contacts-ListContainer {
+	padding-right: 10px;
 }
 
-.dialogVPanel {
-  margin: 5px;
-}
-
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+add-contact-input {
+	border: 1px solid red;
+	border-collapse: collapse;
+	margin-right: 0px;
+	margin-left: auto;
 }

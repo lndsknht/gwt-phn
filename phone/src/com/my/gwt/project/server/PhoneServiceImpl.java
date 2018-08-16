@@ -26,7 +26,7 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 	ArrayList<String> availableIds = Lists.newArrayList();
 
 	public Contact addContact(Contact contact) {
-		//TODO переделать генерацию uuid во избежание коллизий
+		//TODO переделать генерацию uid во избежание коллизий
 		String id;
 		if (availableIds.size() != 0)
 		{

@@ -1,5 +1,7 @@
 package com.my.gwt.project.client.event;
 
-public interface UpdateContactEventHandler {
+import com.google.gwt.event.shared.EventHandler;
 
+public interface UpdateContactEventHandler extends EventHandler {
+	void onUpdateContact(UpdateContactEvent event);
 }
