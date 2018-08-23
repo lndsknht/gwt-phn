@@ -15,4 +15,5 @@ public interface PhoneServiceAsync {
 	void getContact(String id, AsyncCallback<Contact> callback);
 	void getContacts(AsyncCallback<SortedMap<String, Contact>> callback);
 	void getAssumptions(String name, AsyncCallback<SortedMap<String, Contact>> callback);
+	void containsDuplicate(Contact contact, AsyncCallback<Boolean> callback);
 }

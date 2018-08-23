@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.my.gwt.project.shared.Contact;
@@ -22,9 +23,10 @@ public class ContactsListView extends Composite implements ContactsListPresenter
 	private final Button addButton;
 	private final Button deleteButton;
 	private final Button searchButton;
+	private final Button clearSearchButton;
 	private final TextBox searchingField;
-	private FlexTable contactsNamesTable;
-	private FlexTable contactsPhonesTable;
+	private FlexTable namesTable;
+	private FlexTable phonesTable;
 	private final FlexTable contentTable;
 
 	public ContactsListView() {
@@ -56,26 +58,28 @@ public class ContactsListView extends Composite implements ContactsListPresenter
 	    searchHorizPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 	    searchingField = new TextBox();
 	    searchHorizPanel.add(searchingField);
+	    clearSearchButton = new Button("X");
+	    searchHorizPanel.add(clearSearchButton);
 	    searchButton = new Button("Search!");
 	    searchHorizPanel.add(searchButton);
 	    contentTable.getCellFormatter().addStyleName(0, 0, "contacts-ListMenu");
 	    contentTable.setWidget(1, 0, searchHorizPanel);
 	    
-	    contactsNamesTable = new FlexTable();
-	    contactsNamesTable.setCellSpacing(0);
-	    contactsNamesTable.setCellPadding(0);
-	    contactsNamesTable.setWidth("100%");
-	    contactsNamesTable.addStyleName("contacts-ListContents");
-	    contactsNamesTable.getColumnFormatter().setWidth(0, "15px");
-	    contentTable.setWidget(2, 0, contactsNamesTable);
+	    namesTable = new FlexTable();
+	    namesTable.setCellSpacing(0);
+	    namesTable.setCellPadding(0);
+	    namesTable.setWidth("100%");
+	    namesTable.addStyleName("contacts-ListContents");
+	    namesTable.getColumnFormatter().setWidth(0, "15px");
+	    contentTable.setWidget(2, 0, namesTable);
 	    
-	    contactsPhonesTable = new FlexTable();
-	    contactsPhonesTable.setCellSpacing(0);
-	    contactsPhonesTable.setCellPadding(0);
-	    contactsPhonesTable.setWidth("100%");
-	    contactsPhonesTable.addStyleName("contacts-ListContents");
-	    contactsPhonesTable.getColumnFormatter().setWidth(0, "15px");
-	    contentTable.setWidget(2, 1, contactsPhonesTable);
+	    phonesTable = new FlexTable();
+	    phonesTable.setCellSpacing(0);
+	    phonesTable.setCellPadding(0);
+	    phonesTable.setWidth("100%");
+	    phonesTable.addStyleName("contacts-ListContents");
+	    phonesTable.getColumnFormatter().setWidth(0, "15px");
+	    contentTable.setWidget(2, 1, phonesTable);
 	    
 	    contentTableDecorator.add(contentTable);
 	}
@@ -92,34 +96,38 @@ public class ContactsListView extends Composite implements ContactsListPresenter
 		return searchButton;
 	}
 
-	public HasClickHandlers getNamesList() {
-		return contactsNamesTable;
+	public HasClickHandlers getClearSearchButton() {
+		return clearSearchButton;
+	}
+
+	public HasClickHandlers getContactsList() {
+		return namesTable;
 	}
 	
 	public HasClickHandlers getPhonesList() {
-		return contactsPhonesTable;
+		return phonesTable;
 	}
 	
-	public String getSearchingText()
+	public HasValue<String> getSearchTextBox()
 	{
-		return searchingField.getValue();
+		return searchingField;
 	}
 
 	public void setData(SortedMap<String, Contact> data) {
-		contactsNamesTable.removeAllRows();
-		contactsPhonesTable.removeAllRows();
+		namesTable.removeAllRows();
+		phonesTable.removeAllRows();
 
 		for (Entry<String, Contact> entry : data.entrySet()) {
 			int positionID = Integer.valueOf(entry.getKey());
-			contactsNamesTable.setWidget(positionID, 0, new CheckBox());
-			contactsNamesTable.setText(positionID, 1, entry.getValue().getName());
-			contactsPhonesTable.setText(positionID, 2, entry.getValue().getPhoneNumber());
+			namesTable.setWidget(positionID, 0, new CheckBox());
+			namesTable.setText(positionID, 1, entry.getValue().getName());
+			phonesTable.setText(positionID, 2, entry.getValue().getPhoneNumber());
 		}
 	}
 
 	public int getClickedRow(ClickEvent event) {
 		int selectedRow = -1;
-		HTMLTable.Cell cell = contactsNamesTable.getCellForEvent(event);
+		HTMLTable.Cell cell = namesTable.getCellForEvent(event);
 
 		if (cell != null) {
 			//не реагировать на нажатия, если происходит выбор чекбокса
@@ -132,8 +140,8 @@ public class ContactsListView extends Composite implements ContactsListPresenter
 
 	public ArrayList<String> getSelectedRows() {
 		ArrayList<String> selectedRows = new ArrayList<String>();
-		for (Integer i = 0; i < contactsNamesTable.getRowCount(); ++i) {
-			CheckBox checkBox = (CheckBox) contactsNamesTable.getWidget(i, 0);
+		for (Integer i = 0; i < namesTable.getRowCount(); ++i) {
+			CheckBox checkBox = (CheckBox) namesTable.getWidget(i, 0);
 			if (checkBox.getValue()) {
 				selectedRows.add(i.toString());
 			}

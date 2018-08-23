@@ -17,4 +17,5 @@ public interface PhoneService extends RemoteService {
 	Boolean deleteContact(String id);
 	SortedMap<String, Contact> deleteContacts(ArrayList<String> ids);
 	SortedMap<String, Contact> getAssumptions(String name);
+	Boolean containsDuplicate(Contact contact);
 }

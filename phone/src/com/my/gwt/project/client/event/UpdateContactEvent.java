@@ -1,17 +1,18 @@
 package com.my.gwt.project.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.my.gwt.project.shared.Contact;
 
 public class UpdateContactEvent extends GwtEvent<UpdateContactEventHandler> {
 	public static Type<UpdateContactEventHandler> TYPE = new Type<UpdateContactEventHandler>();
-	private final String id;
+	private final Contact contact;
 
-	public UpdateContactEvent(String id) {
-		this.id = id;
+	public UpdateContactEvent(Contact contact) {
+		this.contact = contact;
 	}
 	
-	public String getId() {
-		return id;
+	public Contact getId() {
+		return contact;
 	}
 
 	@Override

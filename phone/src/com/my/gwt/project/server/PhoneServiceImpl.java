@@ -14,8 +14,8 @@ import com.my.gwt.project.client.PhoneService;
 import com.my.gwt.project.shared.Contact;
 
 @SuppressWarnings("serial")
-public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneService {
-	
+public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneService
+{
 	//Хранит значения id - имя, чтобы потом имя можно было использовать для поиска записи в contacts
 	private HashMap<String, String> idsNames = Maps.newHashMap();
 	//Trie - для быстрого поиска контакта по подстроке-имени
@@ -24,8 +24,17 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 	//После удаления контакта, помещаем его id в список. При добавлении нового контакта сначала проверяем список
 	//и если он не пуст - берём значения по очереди. Если пуст - берём idsNames.size()
 	ArrayList<String> availableIds = Lists.newArrayList();
+	
+	String[] sNames = new String[] { "Nedd", "Kate", "Robb", "Jon", "Bran", "Rickon", "Sansa", "Aria" };
+	String[] sPhones = new String[] { "999", "888", "111", "777", "222", "333", "444", "555" };
+	
+	public PhoneServiceImpl() 
+	{
+		initContacts();
+	}
 
-	public Contact addContact(Contact contact) {
+	public Contact addContact(Contact contact) 
+	{
 		//TODO переделать генерацию uid во избежание коллизий
 		String id;
 		if (availableIds.size() != 0)
@@ -43,7 +52,8 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 		return contact;
 	}
 
-	public Contact updateContact(Contact contact) {
+	public Contact updateContact(Contact contact)
+	{
 		String name = idsNames.get(contact.getId());
 		contactsTrie.remove(name);
 		contactsTrie.put(contact.getName(), contact);
@@ -52,12 +62,14 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 		return contact;
 	}
 
-	public Contact getContact(String id) {
+	public Contact getContact(String id) 
+	{
 		String name = idsNames.get(id);
 		return contactsTrie.get(name);
 	}
 
-	public Boolean deleteContact(String id) {
+	public Boolean deleteContact(String id)
+	{
 		String name = idsNames.get(id);
 		contactsTrie.remove(name);
 		idsNames.remove(id);
@@ -65,12 +77,15 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 		return true;
 	}
 
-	public SortedMap<String, Contact> getContacts() {
+	public SortedMap<String, Contact> getContacts() 
+	{
 		return contactsTrie;
 	}
 
-	public SortedMap<String, Contact> deleteContacts(ArrayList<String> ids) {
-		for (int i = 0; i < ids.size(); i++) {
+	public SortedMap<String, Contact> deleteContacts(ArrayList<String> ids)
+	{
+		for (int i = 0; i < ids.size(); i++)
+		{
 			String id = ids.get(i);
 			String name = idsNames.get(id);
 			contactsTrie.remove(name);
@@ -80,8 +95,30 @@ public class PhoneServiceImpl extends RemoteServiceServlet implements PhoneServi
 		return contactsTrie;
 	}
 
-	public SortedMap<String, Contact> getAssumptions(String name) {
+	public SortedMap<String, Contact> getAssumptions(String name) 
+	{
 		return contactsTrie.prefixMap(name);
 	}
 
+	public Boolean containsDuplicate(Contact contact)
+	{
+		return contactsTrie.values().contains(contact);
+	}
+	
+	/**
+	 * Инициализировать список контактов тестовыми значениями 
+	 **/
+	private void initContacts()
+	{
+		for (int i = 0; i < sNames.length; i++)
+		{
+			String id = String.valueOf(i);
+			Contact contact = new Contact();
+			contact.setId(id);
+			contact.setName(sNames[i]);
+			contact.setPhoneNumber(sPhones[i]);
+			contactsTrie.put(id, contact);
+			idsNames.put(id, contact.getName());
+		}
+	}
 }

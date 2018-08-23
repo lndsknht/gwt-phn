@@ -10,8 +10,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.my.gwt.project.client.presenter.*;
 
-public class AddEditContactView extends Composite {
+public class AddEditContactView extends Composite implements AddEditContactPresenter.View {
 	private final TextBox name;
 	private final TextBox phoneNumber;
 	private final FlexTable contactsTable;
@@ -24,28 +26,28 @@ public class AddEditContactView extends Composite {
 	    contentDetailsDecorator.setWidth("18em");
 	    initWidget(contentDetailsDecorator);
 
-	    VerticalPanel contentContactsPanel = new VerticalPanel();
-	    contentContactsPanel.setWidth("100%");
+	    VerticalPanel vertContentPanel = new VerticalPanel();
+	    vertContentPanel.setWidth("100%");
 
 	    contactsTable = new FlexTable();
-	    contactsTable.setCellSpacing(0);
+	    contactsTable.setCellSpacing(1);//0
 	    contactsTable.setWidth("100%");
 	    contactsTable.addStyleName("contacts-ListContainer");
 	    contactsTable.getColumnFormatter().addStyleName(1, "add-contact-input");
 	    name = new TextBox();
 	    phoneNumber = new TextBox();
 	    initContactsTable();
-	    contentContactsPanel.add(contactsTable);
+	    vertContentPanel.add(contactsTable);
 	    
-	    HorizontalPanel menuPanel = new HorizontalPanel();
+	    HorizontalPanel horMenuPanel = new HorizontalPanel();
 	    saveButton = new Button("Save");
 	    cancelButton = new Button("Cancel");
 	    deleteButton = new Button("Delete");
-	    menuPanel.add(saveButton);
-	    menuPanel.add(cancelButton);
-	    menuPanel.add(deleteButton);
-	    contentContactsPanel.add(menuPanel);
-	    contentDetailsDecorator.add(contentContactsPanel);
+	    horMenuPanel.add(saveButton);
+	    horMenuPanel.add(cancelButton);
+	    horMenuPanel.add(deleteButton);
+	    vertContentPanel.add(horMenuPanel);
+	    contentDetailsDecorator.add(vertContentPanel);
 	  }
 
 	private void initContactsTable() {
@@ -54,14 +56,6 @@ public class AddEditContactView extends Composite {
 		contactsTable.setWidget(1, 0, new Label("Phone number"));
 		contactsTable.setWidget(1, 1, phoneNumber);
 		name.setFocus(true);
-	}
-
-	public HasValue<String> getName() {
-		return name;
-	}
-
-	public HasValue<String> getPhoneNumber() {
-		return phoneNumber;
 	}
 
 	public HasClickHandlers getSaveButton() {
@@ -74,5 +68,17 @@ public class AddEditContactView extends Composite {
 	
 	public HasClickHandlers getDeleteButton() {
 		return deleteButton;
+	}
+	
+	public Widget asWidget() {
+		return this;
+	}
+
+	public HasValue<String> getNameTextBox() {
+		return name;
+	}
+
+	public HasValue<String> getPhoneTextBox() {
+		return phoneNumber;
 	}
 }
