@@ -1,5 +1,7 @@
 package com.my.gwt.project.client.presenter;
 
+import java.util.Set;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -32,7 +34,7 @@ public class AddEditContactPresenter implements Presenter
 	private final HandlerManager eventBus; 
 	private final View view;
 	private String id;
-	private boolean hasDuplicate = false;
+	private Set<String> contactIds;
 
 	public AddEditContactPresenter(PhoneServiceAsync rpcService, HandlerManager eventBus, View view) 
 	{
@@ -63,7 +65,7 @@ public class AddEditContactPresenter implements Presenter
 			
 			public void onFailure(Throwable caught) 
 			{
-				Window.alert("Error editing contact in AEP!");
+				Window.alert("Error editing contact!");
 			}
 		});
 	}
@@ -81,10 +83,17 @@ public class AddEditContactPresenter implements Presenter
 		{
 			public void onClick(ClickEvent event) 
 			{
-				checkNameNumAndDuplicate();
-				if (!hasDuplicate) 
+				String name = view.getNameTextBox().getValue();
+				String phoneNumber = view.getPhoneTextBox().getValue();
+				contact.setName(name);
+				contact.setPhoneNumber(phoneNumber);
+				if (validNameAndNumber(contact))
 				{
 					saveContact();
+				}
+				else
+				{
+					Window.alert("Enter correct name-phone values and try again!");
 				}
 			}
 		});
@@ -110,19 +119,27 @@ public class AddEditContactPresenter implements Presenter
 	{
 		if (id.equals("-1"))
 		{
-			rpcService.addContact(contact, new AsyncCallback<Contact>() 
+			if (!hasDuplicate(contact))
 			{
-				public void onSuccess(Contact result) 
+				rpcService.addContact(contact, new AsyncCallback<Contact>() 
 				{
-					eventBus.fireEvent(new UpdateContactEvent(contact));
-				}
-				
-				public void onFailure(Throwable caught) 
-				{
-					Window.alert("Error adding contact in AEP!");
-				}
-			});
-		} else
+					public void onSuccess(Contact result) 
+					{
+						eventBus.fireEvent(new UpdateContactEvent(contact));
+					}
+					
+					public void onFailure(Throwable caught) 
+					{
+						Window.alert("Error adding contact!");
+					}
+				});
+			}
+			else
+			{
+				Window.alert("Enter correct name-phone values and try again!");
+			}
+		} 
+		else
 		{
 			contact.setId(contact.toString());
 			rpcService.updateContact(id, contact, new AsyncCallback<Contact>() 
@@ -134,31 +151,28 @@ public class AddEditContactPresenter implements Presenter
 				
 				public void onFailure(Throwable caught) 
 				{
-					Window.alert("Error editing contact in AEP!");
+					Window.alert("Error editing contact!");
 				}
 			});
 		}
 	}
 	
-	private void checkDuplicate(Contact contact)
+	private boolean hasDuplicate(Contact contact)
 	{
-		rpcService.containsDuplicate(contact, new AsyncCallback<Boolean>() 
+		rpcService.getContactsIds(new AsyncCallback<Set<String>>() 
 		{
-			public void onSuccess(Boolean result) 
+			public void onSuccess(Set<String> result) 
 			{
-				if (result) 
-				{
-					hasDuplicate = true;
-					Window.alert("You can not add contact with such name/phone!"
-							+ " Change name/phone and try again!");
-				}
+				contactIds = result;
 			}
 			
 			public void onFailure(Throwable caught) 
 			{
-				Window.alert("Error checking unique contact in AEP!");
+				Window.alert("Error checking duplicate!");
 			}
 		});
+		
+		return contactIds.contains(contact.toString());
 	}
 	
 	private void deleteContact(String id)
@@ -185,22 +199,5 @@ public class AddEditContactPresenter implements Presenter
 		String name = contact.getName();
 		String phoneNumber = contact.getPhoneNumber();
 		return name.length() >= 2 && name.matches("[a-zA-Z]+") && phoneNumber.length() >= 2;
-	}
-	
-	private void checkNameNumAndDuplicate()
-	{
-		String name = view.getNameTextBox().getValue();
-		String phoneNumber = view.getPhoneTextBox().getValue();
-		contact.setName(name);
-		contact.setPhoneNumber(phoneNumber);
-		if (validNameAndNumber(contact))
-		{
-			checkDuplicate(contact);
-		}
-		else
-		{
-			Window.alert("Name/number is/are incorrect!");
-			return;
-		}
 	}
 }

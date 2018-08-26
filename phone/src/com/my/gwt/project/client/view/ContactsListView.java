@@ -141,7 +141,7 @@ public class ContactsListView extends Composite implements ContactsListPresenter
 		for (int i = 0; i < namesTable.getRowCount(); ++i) {
 			CheckBox checkBox = (CheckBox) namesTable.getWidget(i, 0);
 			if (checkBox.getValue()) {
-				String cellText = namesTable.getText(i, 1);//getWidget(i, 1).getElement().getInnerText();
+				String cellText = namesTable.getText(i, 1);
 				selectedIds.add(cellText);
 			}
 		}

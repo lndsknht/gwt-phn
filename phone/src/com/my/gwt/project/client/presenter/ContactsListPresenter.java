@@ -107,7 +107,7 @@ public class ContactsListPresenter implements Presenter
 
 			public void onFailure(Throwable caught)
 			{
-				Window.alert("Error fetching contacts in LP!");
+				Window.alert("Error fetching contacts!");
 			};
 			
 		});
@@ -128,7 +128,7 @@ public class ContactsListPresenter implements Presenter
 			
 				public void onFailure(Throwable caught) 
 				{
-					Window.alert("Error deleteing contacts in LP!");
+					Window.alert("Error deleteing contacts!");
 				}
 			});
 		}
@@ -145,7 +145,7 @@ public class ContactsListPresenter implements Presenter
 			
 			public void onFailure(Throwable caught) 
 			{
-				Window.alert("Error searching by name in LP!");
+				Window.alert("Error searching by name!");
 			}
 		});
 	}

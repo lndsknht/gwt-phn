@@ -5,9 +5,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootPanel;
 
-/**
- * Основной класс PhoneBook
- * */
 public class Phone implements EntryPoint {
 
 	public void onModuleLoad() {
