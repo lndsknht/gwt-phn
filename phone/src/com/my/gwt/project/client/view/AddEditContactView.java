@@ -30,7 +30,7 @@ public class AddEditContactView extends Composite implements AddEditContactPrese
 	    vertContentPanel.setWidth("100%");
 
 	    contactsTable = new FlexTable();
-	    contactsTable.setCellSpacing(1);//0
+	    contactsTable.setCellSpacing(0);
 	    contactsTable.setWidth("100%");
 	    contactsTable.addStyleName("contacts-ListContainer");
 	    contactsTable.getColumnFormatter().addStyleName(1, "add-contact-input");

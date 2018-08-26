@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.my.gwt.project.client.PhoneServiceAsync;
-import com.my.gwt.project.client.event.AddContactEvent;
 import com.my.gwt.project.client.event.CancelEditContactEvent;
+import com.my.gwt.project.client.event.DeleteContactEvent;
 import com.my.gwt.project.client.event.UpdateContactEvent;
 import com.my.gwt.project.shared.Contact;
 
@@ -32,6 +32,7 @@ public class AddEditContactPresenter implements Presenter
 	private final HandlerManager eventBus; 
 	private final View view;
 	private String id;
+	private boolean hasDuplicate = false;
 
 	public AddEditContactPresenter(PhoneServiceAsync rpcService, HandlerManager eventBus, View view) 
 	{
@@ -76,30 +77,37 @@ public class AddEditContactPresenter implements Presenter
 
 	private void bind() 
 	{
-		view.getSaveButton().addClickHandler(new ClickHandler()
+		this.view.getSaveButton().addClickHandler(new ClickHandler()
 		{
 			public void onClick(ClickEvent event) 
 			{
-				saveContact();
+				checkNameNumAndDuplicate();
+				if (!hasDuplicate) 
+				{
+					saveContact();
+				}
 			}
 		});
 		
-		view.getCancelButton().addClickHandler(new ClickHandler() 
+		this.view.getCancelButton().addClickHandler(new ClickHandler() 
 		{
 			public void onClick(ClickEvent event) 
 			{
 				eventBus.fireEvent(new CancelEditContactEvent());
 			}
 		});
+		
+		this.view.getDeleteButton().addClickHandler(new ClickHandler() 
+		{
+			public void onClick(ClickEvent event) 
+			{
+				deleteContact(id);
+			}
+		});
 	}
 	
 	private void saveContact() 
 	{
-		String name = view.getNameTextBox().getValue();
-		String phoneNumber = view.getPhoneTextBox().getValue();
-		contact.setName(name);
-		contact.setPhoneNumber(phoneNumber);
-		checkDuplicate(contact);
 		if (id.equals("-1"))
 		{
 			rpcService.addContact(contact, new AsyncCallback<Contact>() 
@@ -116,7 +124,8 @@ public class AddEditContactPresenter implements Presenter
 			});
 		} else
 		{
-			rpcService.updateContact(contact, new AsyncCallback<Contact>() 
+			contact.setId(contact.toString());
+			rpcService.updateContact(id, contact, new AsyncCallback<Contact>() 
 			{
 				public void onSuccess(Contact result) 
 				{
@@ -139,6 +148,7 @@ public class AddEditContactPresenter implements Presenter
 			{
 				if (result) 
 				{
+					hasDuplicate = true;
 					Window.alert("You can not add contact with such name/phone!"
 							+ " Change name/phone and try again!");
 				}
@@ -149,5 +159,48 @@ public class AddEditContactPresenter implements Presenter
 				Window.alert("Error checking unique contact in AEP!");
 			}
 		});
+	}
+	
+	private void deleteContact(String id)
+	{
+		if (!id.equals("-1"))
+		{
+			rpcService.deleteContact(id, new AsyncCallback<Boolean>() 
+			{
+				public void onSuccess(Boolean result) 
+				{
+					eventBus.fireEvent(new DeleteContactEvent());
+				}
+				
+				public void onFailure(Throwable caught) 
+				{
+					Window.alert("Error during deleting contact from card!");
+				}
+			});
+		}
+	}
+	
+	private boolean validNameAndNumber(Contact contact)
+	{
+		String name = contact.getName();
+		String phoneNumber = contact.getPhoneNumber();
+		return name.length() >= 2 && name.matches("[a-zA-Z]+") && phoneNumber.length() >= 2;
+	}
+	
+	private void checkNameNumAndDuplicate()
+	{
+		String name = view.getNameTextBox().getValue();
+		String phoneNumber = view.getPhoneTextBox().getValue();
+		contact.setName(name);
+		contact.setPhoneNumber(phoneNumber);
+		if (validNameAndNumber(contact))
+		{
+			checkDuplicate(contact);
+		}
+		else
+		{
+			Window.alert("Name/number is/are incorrect!");
+			return;
+		}
 	}
 }

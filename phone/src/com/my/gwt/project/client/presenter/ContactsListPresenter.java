@@ -1,7 +1,7 @@
 package com.my.gwt.project.client.presenter;
 
 import java.util.ArrayList;
-import java.util.SortedMap;
+import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,13 +27,14 @@ public class ContactsListPresenter implements Presenter
 		HasClickHandlers getClearSearchButton();
 		HasClickHandlers getContactsList();
 		HasValue<String> getSearchTextBox();
+		String getClickedCellText(ClickEvent event);
+		ArrayList<String> getSelectedRowsIds();
 		int getClickedRow(ClickEvent event);
-		ArrayList<String> getSelectedRows();
-		void setData(SortedMap<String, Contact> data);
+		void setData(HashMap<String, Contact> contacts);
 		Widget asWidget();
 	}
 	
-	private SortedMap<String, Contact> contacts;
+	private HashMap<String, Contact> contacts;
 	private final PhoneServiceAsync rpcService; 
 	private final HandlerManager eventBus;
 	private final View view;
@@ -75,9 +76,10 @@ public class ContactsListPresenter implements Presenter
 		{
 			public void onClick(ClickEvent event) 
 			{
-				int id = view.getClickedRow(event);
-				if (id >= 0) 
+				int row = view.getClickedRow(event);
+				if (row >= 0) 
 				{
+					String id = view.getClickedCellText(event);
 					eventBus.fireEvent(new EditContactEvent(String.valueOf(id)));
 				}
 			}
@@ -95,30 +97,31 @@ public class ContactsListPresenter implements Presenter
 	
 	private void fetchContacts() 
 	{
-		rpcService.getContacts(new AsyncCallback<SortedMap<String,Contact>>() 
-		{
-			public void onSuccess(SortedMap<String, Contact> result) 
+		rpcService.getContacts(new AsyncCallback<HashMap<String,Contact>>() 
+		{ 
+			public void onSuccess(HashMap<String,Contact> result) 
 			{
 				contacts = result;
 				view.setData(result);
 			}
-			
-			public void onFailure(Throwable caught) 
+
+			public void onFailure(Throwable caught)
 			{
 				Window.alert("Error fetching contacts in LP!");
-				System.out.println(caught.getStackTrace().toString());
-			}
+			};
+			
 		});
 	}
 	
 	private void deleteSelectedContacts() 
 	{
-		ArrayList<String> ids = view.getSelectedRows();
-		if (ids.size() > 0)
+		ArrayList<String> selectedRows = view.getSelectedRowsIds();
+		
+		if (selectedRows.size() > 0)
 		{
-			rpcService.deleteContacts(ids, new AsyncCallback<SortedMap<String,Contact>>() 
+			rpcService.deleteContacts(selectedRows, new AsyncCallback<HashMap<String,Contact>>() 
 			{
-				public void onSuccess(SortedMap<String, Contact> result) 
+				public void onSuccess(HashMap<String, Contact> result) 
 				{
 					view.setData(result);
 				}
@@ -133,10 +136,9 @@ public class ContactsListPresenter implements Presenter
 	
 	private void getAssumptions(String name) 
 	{
-		rpcService.getAssumptions(name, new AsyncCallback<SortedMap<String,Contact>>() 
+		rpcService.getAssumptions(name, new AsyncCallback<HashMap<String,Contact>>() 
 		{
-			
-			public void onSuccess(SortedMap<String, Contact> result) 
+			public void onSuccess(HashMap<String, Contact> result) 
 			{
 				view.setData(result);
 			}
